@@ -11,10 +11,10 @@ outputs:
     value: ${{ steps.random-number-generator.outputs.random-number }}
   installed-packages:
     description: "Installed Python packages"
-    value: ${{ steps.installed-packages.outputs.INSTALLED_PACKAGES }}
+    value: "${{ steps.installed-packages.outputs.INSTALLED_PACKAGES }}"
   latest-description:
     description: "Content of latest changelog entry"
-    value: ${{ steps.parse-changelog.outputs.LATEST_DESCRIPTION }}
+    value: "${{ steps.parse-changelog.outputs.LATEST_DESCRIPTION }}"
   latest-version:
     description: "Latest changelog version"
     value: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}
