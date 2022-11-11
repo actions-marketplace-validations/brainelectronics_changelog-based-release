@@ -25,6 +25,10 @@ r"^\#\# \[\d{1,}[.]\d{1,}[.]\d{1,}\] \- \d{4}\-\d{2}-\d{2}$"
 - [`requirements.txt`](requirements.txt) file to setup required packages
 - [GitHub CI test workflow](.github/workflows/main.yml) to test [`action.yaml`](action.yaml)
 
+## [0.0.0] - 2022-11-11
+### Fixed
+- The above `0.0.0` section is required due to a bug in `changelog2version`
+
 <!-- Links -->
 [Unreleased]: https://github.com/brainelectronics/composite-action-test/compare/0.1.0...main
 
