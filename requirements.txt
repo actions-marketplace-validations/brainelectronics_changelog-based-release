@@ -1,0 +1,3 @@
+# List external packages here
+# Avoid fixed versions
+changelog2version>=0.7.0,<1
