@@ -45,9 +45,10 @@ runs:
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
-    - name: Print changelog2version version
-      run: changelog2version --version
-      shell: bash
+    # - name: Print changelog2version version
+    #   # does not exit with 0
+    #   run: changelog2version --version
+    #   shell: bash
     - name: Parse changelog
       id: parse-changelog
       run: |
