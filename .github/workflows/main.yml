@@ -22,7 +22,8 @@ jobs:
       - name: Test own action
         id: foo
         # uses: brainelectronics/composite-action-test@${{ github.head_ref }}
-        uses: brainelectronics/composite-action-test@${{ env.GITHUB_REF_NAME }}
+        # uses: brainelectronics/composite-action-test@${{ env.GITHUB_REF_NAME }}
+        uses: brainelectronics/composite-action-test@feature/initial-implementation
         with:
           who-to-greet: 'Mona the Octocat'
       - name: Report action output
