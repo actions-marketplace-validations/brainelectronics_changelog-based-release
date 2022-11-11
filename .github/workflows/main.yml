@@ -6,7 +6,7 @@ name: Test yourself
 on: [push]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   hello_world_job:
