@@ -47,6 +47,7 @@ runs:
       shell: bash
     - name: Print changelog2version version
       run: changelog2version --version
+      shell: bash
     - name: Parse changelog
       id: parse-changelog
       run: |
