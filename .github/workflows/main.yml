@@ -18,11 +18,12 @@ jobs:
           python-version: '3.9'
       - name: Test own action
         id: foo
-        # uses: actions/hello-world-composite-action@v1
-        uses: brainelectronics/composite-action-test@main
+        uses: brainelectronics/composite-action-test@${{ env.GITHUB_REF_NAME }}
         with:
           who-to-greet: 'Mona the Octocat'
-      - run: echo random-number ${{ steps.foo.outputs.random-number }}
-        shell: bash
-      - run: echo installed-packages ${{ steps.foo.outputs.installed-packages }}
-        shell: bash
+      - name: Report action output
+        run: |
+        echo "random-number ${{ steps.foo.outputs.random-number }}"
+        echo "installed-packages: ${{ steps.foo.outputs.installed-packages }}"
+        echo "latest-description: ${{ steps.foo.outputs.latest-description }}"
+        echo "latest-version: ${{ steps.foo.outputs.latest-version }}"
