@@ -5,6 +5,14 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'World'
+  draft-release:  # id of input
+    description: 'Is this a draft release'
+    required: true
+    default: false
+  prerelease:  # id of input
+    description: 'Is this a Prerelease'
+    required: true
+    default: false
 outputs:
   random-number:
     description: "Random number"
@@ -21,14 +29,18 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: pip install -r requirements.txt
+    - name: Install required packages
+      run: pip install -r requirements.txt
       shell: bash
-    - run: echo Hello ${{ inputs.who-to-greet }}.
+    - name: Say Hello to the user
+      run: echo Hello ${{ inputs.who-to-greet }}.
       shell: bash
-    - id: random-number-generator
+    - name: Generate random number
+      id: random-number-generator
       run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
       shell: bash
-    - id: installed-packages
+    - name: Collect installed packages
+      id: installed-packages
       # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
       run: |
         echo 'INSTALLED_PACKAGES<<"EOT"' >> $GITHUB_OUTPUT
@@ -37,7 +49,8 @@ runs:
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
-    - id: parse-changelog
+    - name: Parse changelog
+      id: parse-changelog
       run: |
         changelog2version --changelog_file changelog.md --print | python -c "import sys, json; print(json.load(sys.stdin)['info']['description'])" > latest_description.txt
         echo 'LATEST_DESCRIPTION<<"EOT"' >> $GITHUB_OUTPUT
@@ -46,5 +59,15 @@ runs:
         latest_version=$(changelog2version --changelog_file changelog.md --print | python -c "import sys, json; print(json.load(sys.stdin)['info']['version'])")
         echo "LATEST_VERSION=$latest_version" >> $GITHUB_OUTPUT
       shell: bash
+    - name: Create (Pre)Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}-rc${{ github.run_number }}.dev${{ github.event.number }}
+        release_name: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}-rc${{ github.run_number }}.dev${{ github.event.number }}
+        body: ${{ steps.parse-changelog.outputs.LATEST_DESCRIPTION }}
+        draft: ${{ inputs.draft-release }}
+        prerelease: ${{ inputs.prerelease }}
     # - run: goodbye.sh
     #   shell: bash

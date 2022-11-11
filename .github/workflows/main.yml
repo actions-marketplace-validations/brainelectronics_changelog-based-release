@@ -26,6 +26,7 @@ jobs:
         uses: brainelectronics/composite-action-test@feature/initial-implementation
         with:
           who-to-greet: 'Mona the Octocat'
+          draft-release: true
       - name: Report action output
         run: |
           echo "random-number ${{ steps.foo.outputs.random-number }}"
