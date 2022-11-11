@@ -12,10 +12,16 @@ outputs:
   installed-packages:
     description: "Installed Python packages"
     value: ${{ steps.installed-packages.outputs.INSTALLED_PACKAGES }}
+  latest-description:
+    description: "Content of latest changelog entry"
+    value: ${{ steps.parse-changelog.outputs.LATEST_DESCRIPTION }}
+  latest-version:
+    description: "Latest changelog version"
+    value: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}
 runs:
   using: "composite"
   steps:
-    - run: pip install 'changelog2version>=0.7.0,<1'
+    - run: pip install -r requirements.txt
       shell: bash
     - run: echo Hello ${{ inputs.who-to-greet }}.
       shell: bash
@@ -31,5 +37,13 @@ runs:
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
+    - id: parse-changelog
+      run: |
+        changelog2version --changelog_file changelog.md --print | python -c "import sys, json; print(json.load(sys.stdin)['info']['description'])" > latest_description.txt
+        echo 'LATEST_DESCRIPTION<<"EOT"' >> $GITHUB_OUTPUT
+        cat latest_description.txt >> $GITHUB_OUTPUT
+        echo '"EOT"' >> $GITHUB_OUTPUT
+        latest_version=$(changelog2version --changelog_file changelog.md --print | python -c "import sys, json; print(json.load(sys.stdin)['info']['version'])")
+        echo "LATEST_VERSION=$latest_version" >> $GITHUB_OUTPUT
     # - run: goodbye.sh
     #   shell: bash
