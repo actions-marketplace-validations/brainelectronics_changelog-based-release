@@ -21,7 +21,6 @@ jobs:
         # uses: brainelectronics/composite-action-test@${{ env.GITHUB_REF_NAME }}
         uses: brainelectronics/composite-action-test@feature/initial-implementation
         with:
-          who-to-greet: 'Mona the Octocat'
           draft-release: true
           github-token:  ${{ secrets.GITHUB_TOKEN }}
       - name: Report action output
