@@ -1,5 +1,6 @@
 name: 'Hello World with changelog2version'
 description: 'Greet someone and install changelog2version'
+
 inputs:
   who-to-greet:  # id of input
     description: 'Who to greet'
@@ -16,6 +17,7 @@ inputs:
     description: 'Is this a Prerelease'
     required: true
     default: false
+
 outputs:
   random-number:
     description: "Random number"
@@ -29,9 +31,14 @@ outputs:
   latest-version:
     description: "Latest changelog version"
     value: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}
+
 runs:
   using: "composite"
   steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
     - name: Install required packages
       run: pip install -r requirements.txt
       shell: bash
