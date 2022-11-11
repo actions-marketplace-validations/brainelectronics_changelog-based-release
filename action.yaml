@@ -65,7 +65,7 @@ runs:
     - name: Create (Pre)Release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
       with:
         tag_name: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}-rc${{ github.run_number }}.dev${{ github.event.number }}
         release_name: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}-rc${{ github.run_number }}.dev${{ github.event.number }}
