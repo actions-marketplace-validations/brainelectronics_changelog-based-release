@@ -11,7 +11,7 @@ outputs:
     value: ${{ steps.random-number-generator.outputs.random-number }}
   installed-packages:
     description: "Installed Python packages"
-    value: ${{ steps.installed-packages.outputs.installed-packages }}
+    value: ${{ steps.installed-packages.outputs.INSTALLED_PACKAGES }}
 runs:
   using: "composite"
   steps:
@@ -23,7 +23,11 @@ runs:
       run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
       shell: bash
     - id: installed-packages
-      run: echo "installed-packages=$(pip freeze)" >> $GITHUB_OUTPUT
+      # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
+      run: |
+        echo 'INSTALLED_PACKAGES<<"EOT"' >> $GITHUB_OUTPUT
+        pip freeze >> $GITHUB_OUTPUT
+        echo '"EOT"' >> $GITHUB_OUTPUT
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
