@@ -5,6 +5,9 @@ name: Test yourself
 
 on: [push]
 
+permissions:
+  contents: read
+
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
