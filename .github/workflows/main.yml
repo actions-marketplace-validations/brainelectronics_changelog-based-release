@@ -27,6 +27,7 @@ jobs:
         with:
           who-to-greet: 'Mona the Octocat'
           draft-release: true
+          github-token:  ${{ secrets.GITHUB_TOKEN }}
       - name: Report action output
         run: |
           echo "random-number ${{ steps.foo.outputs.random-number }}"
