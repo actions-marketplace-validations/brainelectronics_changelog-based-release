@@ -23,7 +23,7 @@ jobs:
           who-to-greet: 'Mona the Octocat'
       - name: Report action output
         run: |
-        echo "random-number ${{ steps.foo.outputs.random-number }}"
-        echo "installed-packages: ${{ steps.foo.outputs.installed-packages }}"
-        echo "latest-description: ${{ steps.foo.outputs.latest-description }}"
-        echo "latest-version: ${{ steps.foo.outputs.latest-version }}"
+          echo "random-number ${{ steps.foo.outputs.random-number }}"
+          echo "installed-packages: ${{ steps.foo.outputs.installed-packages }}"
+          echo "latest-description: ${{ steps.foo.outputs.latest-description }}"
+          echo "latest-version: ${{ steps.foo.outputs.latest-version }}"
