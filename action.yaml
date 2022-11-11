@@ -45,5 +45,6 @@ runs:
         echo '"EOT"' >> $GITHUB_OUTPUT
         latest_version=$(changelog2version --changelog_file changelog.md --print | python -c "import sys, json; print(json.load(sys.stdin)['info']['version'])")
         echo "LATEST_VERSION=$latest_version" >> $GITHUB_OUTPUT
+      shell: bash
     # - run: goodbye.sh
     #   shell: bash
