@@ -6,6 +6,10 @@ inputs:
   github-token:
     description: 'GitHub token for release'
     required: true
+  changelog-path:
+    description: 'Path to changelog used for releasing'
+    required: false
+    default: 'changelog.md'
   tag-name-prefix:
     description: 'Prefix of tag name before extraced x.y.z from changelog'
     required: false
@@ -68,11 +72,11 @@ runs:
     - name: Parse changelog
       id: parse-changelog
       run: |
-        changelog2version --changelog_file changelog.md --print | python -c "import sys, json; print(json.load(sys.stdin)['info']['description'])" > latest_description.txt
+        changelog2version --changelog_file ${{ inputs.changelog-path }} --print | python -c "import sys, json; print(json.load(sys.stdin)['info']['description'])" > latest_description.txt
         echo 'LATEST_DESCRIPTION<<"EOT"' >> $GITHUB_OUTPUT
         cat latest_description.txt >> $GITHUB_OUTPUT
         echo '"EOT"' >> $GITHUB_OUTPUT
-        latest_version=$(changelog2version --changelog_file changelog.md --print | python -c "import sys, json; print(json.load(sys.stdin)['info']['version'])")
+        latest_version=$(changelog2version --changelog_file ${{ inputs.changelog-path }} --print | python -c "import sys, json; print(json.load(sys.stdin)['info']['version'])")
         echo "LATEST_VERSION=$latest_version" >> $GITHUB_OUTPUT
       shell: bash
     - name: Create (Pre)Release
