@@ -16,16 +16,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Test action with default inputs
-        # uses: brainelectronics/composite-action-test@${{ github.head_ref }}
-        # uses: brainelectronics/composite-action-test@${{ env.GITHUB_REF_NAME }}
-        uses: brainelectronics/composite-action-test@feature/initial-implementation
+        # uses: brainelectronics/changelog-based-release@${{ github.head_ref }}
+        # uses: brainelectronics/changelog-based-release@${{ env.GITHUB_REF_NAME }}
+        uses: brainelectronics/changelog-based-release@feature/initial-implementation
         with:
           draft-release: true
       - name: Test action with custom inputs
         id: foo
-        # uses: brainelectronics/composite-action-test@${{ github.head_ref }}
-        # uses: brainelectronics/composite-action-test@${{ env.GITHUB_REF_NAME }}
-        uses: brainelectronics/composite-action-test@feature/initial-implementation
+        # uses: brainelectronics/changelog-based-release@${{ github.head_ref }}
+        # uses: brainelectronics/changelog-based-release@${{ env.GITHUB_REF_NAME }}
+        uses: brainelectronics/changelog-based-release@feature/initial-implementation
         with:
           github-token:  ${{ secrets.GITHUB_TOKEN }}
           changelog-path: 'changelog.md'
