@@ -17,21 +17,26 @@ r"^\#\# \[\d{1,}[.]\d{1,}[.]\d{1,}\] \- \d{4}\-\d{2}-\d{2}$"
 -->
 
 ## Released
-## [0.1.0] - 2022-11-11
+## [1.0.0] - 2022-11-12
 ### Added
 - This changelog file
 - [`.gitignore`](.gitignore) file
-- Initial [`changelog2version`](changelog2version) package
-- [`requirements.txt`](requirements.txt) file to setup required packages
+- [`requirements.txt`](requirements.txt) file to install all required packages
 - [GitHub CI test workflow](.github/workflows/main.yml) to test [`action.yaml`](action.yaml)
+- [GitHub CI release workflow](.github/workflows/release.yml) to create a tag and release on every run on `main`
+- Usage description in [`README`](README.md)
 
-## [0.0.0] - 2022-11-11
+### Changed
+- [`action.yaml`](action.yaml) file updated with steps to run `changelog2version` and create a tagged release
+
+## [0.1.0] - 2022-11-11
 ### Fixed
-- The above `0.0.0` section is required due to a bug in `changelog2version`
+- The above `0.1.0` section is required due to a bug in `changelog2version`
 
 <!-- Links -->
-[Unreleased]: https://github.com/brainelectronics/composite-action-test/compare/0.1.0...main
+[Unreleased]: https://github.com/brainelectronics/changelog-based-release/compare/1.0.0...main
 
-[0.1.0]: https://github.com/brainelectronics/composite-action-test/tree/0.1.0
+[1.0.0]: https://github.com/brainelectronics/changelog-based-release/tree/1.0.0
+[0.1.0]: https://github.com/brainelectronics/changelog-based-release/tree/0.1.0
 
-<!-- [ref-issue-1]: https://github.com/brainelectronics/omposite-action-test/issues/1 -->
+<!-- [ref-issue-1]: https://github.com/brainelectronics/changelog-based-release/issues/1 -->
