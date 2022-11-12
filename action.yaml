@@ -5,6 +5,14 @@ inputs:
   github-token:
     description: 'GitHub token for release'
     required: true
+  tag-name-extension:
+    description: 'Extension of tag name after extraced x.y.z from changelog'
+    required: false
+    default: -rc${{ github.run_number }}.dev${{ github.event.number }}
+  release-name-extension:
+    description: 'Extension of release name after extraced x.y.z from changelog'
+    required: false
+    default: -rc${{ github.run_number }}.dev${{ github.event.number }}
   draft-release:
     description: 'Is this a draft release'
     required: true
@@ -63,8 +71,8 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
       with:
-        tag_name: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}-rc${{ github.run_number }}.dev${{ github.event.number }}
-        release_name: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}-rc${{ github.run_number }}.dev${{ github.event.number }}
+        tag_name: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}${{ inputs.tag-name-extension }}
+        release_name: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}${{ inputs.release-name-extension }}
         body: ${{ steps.parse-changelog.outputs.LATEST_DESCRIPTION }}
         draft: ${{ inputs.draft-release }}
         prerelease: ${{ inputs.prerelease }}
