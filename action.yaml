@@ -1,35 +1,81 @@
-name: 'Hello World with changelog2version'
-description: 'Greet someone and install changelog2version'
+name: 'Create changelog based release'
+author: 'brainelectronics'
+description: 'changelog2version based release action'
+
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  github-token:
+    description: 'GitHub token for release'
     required: true
-    default: 'World'
+    default: ${{ github.token }}
+  changelog-path:
+    description: 'Path to changelog used for releasing'
+    required: false
+    default: 'changelog.md'
+  tag-name-prefix:
+    description: 'Prefix of tag name before extracted x.y.z from changelog'
+    required: false
+    default: ''
+  tag-name-extension:
+    description: 'Extension of tag name after extracted x.y.z from changelog'
+    required: false
+    default: -rc${{ github.run_number }}.dev${{ github.event.number }}
+  release-name-prefix:
+    description: 'Prefix of release name before extracted x.y.z from changelog'
+    required: false
+    default: ''
+  release-name-extension:
+    description: 'Extension of release name after extracted x.y.z from changelog'
+    required: false
+    default: -rc${{ github.run_number }}.dev${{ github.event.number }}
+  draft-release:
+    description: 'Is this a draft release'
+    required: true
+    default: false
+  prerelease:
+    description: 'Is this a Prerelease'
+    required: true
+    default: false
+
 outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
-  installed-packages:
-    description: "Installed Python packages"
-    value: ${{ steps.installed-packages.outputs.INSTALLED_PACKAGES }}
+  latest-description:
+    description: "Content of latest changelog entry"
+    value: "${{ steps.parse-changelog.outputs.LATEST_DESCRIPTION }}"
+  latest-version:
+    description: "Latest changelog version"
+    value: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}
+
 runs:
   using: "composite"
   steps:
-    - run: pip install 'changelog2version>=0.7.0,<1'
-      shell: bash
-    - run: echo Hello ${{ inputs.who-to-greet }}.
-      shell: bash
-    - id: random-number-generator
-      run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
-      shell: bash
-    - id: installed-packages
-      # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
-      run: |
-        echo 'INSTALLED_PACKAGES<<"EOT"' >> $GITHUB_OUTPUT
-        pip freeze >> $GITHUB_OUTPUT
-        echo '"EOT"' >> $GITHUB_OUTPUT
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install required packages
+      run: pip install -r requirements.txt
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
-    # - run: goodbye.sh
-    #   shell: bash
+    - name: Print changelog2version version
+      run: changelog2version --version
+      shell: bash
+    - name: Parse changelog
+      id: parse-changelog
+      run: |
+        changelog2version --changelog_file ${{ inputs.changelog-path }} --print | python -c "import sys, json; print(json.load(sys.stdin)['info']['description'])" > latest_description.txt
+        echo 'LATEST_DESCRIPTION<<"EOT"' >> $GITHUB_OUTPUT
+        cat latest_description.txt >> $GITHUB_OUTPUT
+        echo '"EOT"' >> $GITHUB_OUTPUT
+        latest_version=$(changelog2version --changelog_file ${{ inputs.changelog-path }} --print | python -c "import sys, json; print(json.load(sys.stdin)['info']['version'])")
+        echo "LATEST_VERSION=$latest_version" >> $GITHUB_OUTPUT
+      shell: bash
+    - name: Create (Pre)Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+      with:
+        tag_name: ${{ inputs.tag-name-prefix }}${{ steps.parse-changelog.outputs.LATEST_VERSION }}${{ inputs.tag-name-extension }}
+        release_name: ${{ inputs.tag-name-prefix }}${{ steps.parse-changelog.outputs.LATEST_VERSION }}${{ inputs.release-name-extension }}
+        body: ${{ steps.parse-changelog.outputs.LATEST_DESCRIPTION }}
+        draft: ${{ inputs.draft-release }}
+        prerelease: ${{ inputs.prerelease }}
