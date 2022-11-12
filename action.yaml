@@ -6,24 +6,25 @@ inputs:
   github-token:
     description: 'GitHub token for release'
     required: true
+    default: ${{ github.token }}
   changelog-path:
     description: 'Path to changelog used for releasing'
     required: false
     default: 'changelog.md'
   tag-name-prefix:
-    description: 'Prefix of tag name before extraced x.y.z from changelog'
+    description: 'Prefix of tag name before extracted x.y.z from changelog'
     required: false
     default: ''
   tag-name-extension:
-    description: 'Extension of tag name after extraced x.y.z from changelog'
+    description: 'Extension of tag name after extracted x.y.z from changelog'
     required: false
     default: -rc${{ github.run_number }}.dev${{ github.event.number }}
   release-name-prefix:
-    description: 'Prefix of release name before extraced x.y.z from changelog'
+    description: 'Prefix of release name before extracted x.y.z from changelog'
     required: false
     default: ''
   release-name-extension:
-    description: 'Extension of release name after extraced x.y.z from changelog'
+    description: 'Extension of release name after extracted x.y.z from changelog'
     required: false
     default: -rc${{ github.run_number }}.dev${{ github.event.number }}
   draft-release:
@@ -36,9 +37,6 @@ inputs:
     default: false
 
 outputs:
-  installed-packages:
-    description: "Installed Python packages"
-    value: "${{ steps.installed-packages.outputs.INSTALLED_PACKAGES }}"
   latest-description:
     description: "Content of latest changelog entry"
     value: "${{ steps.parse-changelog.outputs.LATEST_DESCRIPTION }}"
@@ -55,14 +53,6 @@ runs:
         python-version: '3.10'
     - name: Install required packages
       run: pip install -r requirements.txt
-      shell: bash
-    - name: Collect installed packages
-      id: installed-packages
-      # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
-      run: |
-        echo 'INSTALLED_PACKAGES<<"EOT"' >> $GITHUB_OUTPUT
-        pip freeze >> $GITHUB_OUTPUT
-        echo '"EOT"' >> $GITHUB_OUTPUT
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
