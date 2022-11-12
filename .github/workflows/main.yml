@@ -3,7 +3,7 @@
 
 name: Draft release
 
-on: [push]
+on: [pull_request]
 
 permissions:
   contents: write
@@ -16,12 +16,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Test action with default inputs
-        uses: brainelectronics/changelog-based-release@feature/initial-implementation
+        uses: brainelectronics/changelog-based-release@main
         with:
           draft-release: true
       - name: Test action with custom inputs
         id: foo
-        uses: brainelectronics/changelog-based-release@feature/initial-implementation
+        uses: brainelectronics/changelog-based-release@main
         with:
           github-token:  ${{ secrets.GITHUB_TOKEN }}
           changelog-path: 'changelog.md'
