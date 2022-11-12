@@ -1,6 +1,6 @@
 # Changelog based release Action
 
-[![Draft release](https://github.com/brainelectronics/changelog-based-release/actions/workflows/release.yml/badge.svg)](https://github.com/brainelectronics/changelog-based-release/actions/workflows/release.yml)
+[![Create release](https://github.com/brainelectronics/changelog-based-release/actions/workflows/release.yaml/badge.svg)](https://github.com/brainelectronics/changelog-based-release/actions/workflows/release.yaml)
 ![Release](https://img.shields.io/github/v/release/brainelectronics/changelog-based-release?include_prereleases&color=success)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
