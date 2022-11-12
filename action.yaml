@@ -1,14 +1,23 @@
 name: 'Create changelog based release'
+author: 'brainelectronics'
 description: 'changelog2version based release action'
 
 inputs:
   github-token:
     description: 'GitHub token for release'
     required: true
+  tag-name-prefix:
+    description: 'Prefix of tag name before extraced x.y.z from changelog'
+    required: false
+    default: ''
   tag-name-extension:
     description: 'Extension of tag name after extraced x.y.z from changelog'
     required: false
     default: -rc${{ github.run_number }}.dev${{ github.event.number }}
+  release-name-prefix:
+    description: 'Prefix of release name before extraced x.y.z from changelog'
+    required: false
+    default: ''
   release-name-extension:
     description: 'Extension of release name after extraced x.y.z from changelog'
     required: false
@@ -71,8 +80,8 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
       with:
-        tag_name: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}${{ inputs.tag-name-extension }}
-        release_name: ${{ steps.parse-changelog.outputs.LATEST_VERSION }}${{ inputs.release-name-extension }}
+        tag_name: ${{ inputs.tag-name-prefix }}${{ steps.parse-changelog.outputs.LATEST_VERSION }}${{ inputs.tag-name-extension }}
+        release_name: ${{ inputs.tag-name-prefix }}${{ steps.parse-changelog.outputs.LATEST_VERSION }}${{ inputs.release-name-extension }}
         body: ${{ steps.parse-changelog.outputs.LATEST_DESCRIPTION }}
         draft: ${{ inputs.draft-release }}
         prerelease: ${{ inputs.prerelease }}
