@@ -16,15 +16,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Test action with default inputs
-        uses: brainelectronics/changelog-based-release@${{ github.ref_name }}
-        # uses: brainelectronics/changelog-based-release@feature/initial-implementation
+        # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
+        uses: ./action.yaml
         with:
           draft-release: true
       - name: Test action with custom inputs
         id: foo
-        # uses: brainelectronics/changelog-based-release@${{ github.head_ref }}
-        # uses: brainelectronics/changelog-based-release@${{ env.GITHUB_REF_NAME }}
-        uses: brainelectronics/changelog-based-release@feature/initial-implementation
+        uses: ./action.yaml
         with:
           github-token:  ${{ secrets.GITHUB_TOKEN }}
           changelog-path: 'changelog.md'
