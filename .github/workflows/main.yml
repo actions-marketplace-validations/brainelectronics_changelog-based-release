@@ -15,6 +15,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Show files after checkout
+        run: |
+          pwd
+          ls
+        shell: bash
       - name: Test action with default inputs
         # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
         uses: ./action.yaml
