@@ -23,8 +23,16 @@ jobs:
         with:
           draft-release: true
           github-token:  ${{ secrets.GITHUB_TOKEN }}
+          tag-name-prefix: 'v'
+          tag-name-extension: '+${{ github.sha }}'
+          release-name-prefix: 'Test'
+          release-name-extension: '-rc${{ github.run_number }}.dev${{ github.event.number }}+${{ github.sha }}'
       - name: Report action output
         run: |
           echo "installed-packages: ${{ steps.foo.outputs.installed-packages }}"
           printf "latest-description: ${{ steps.foo.outputs.latest-description }}"
           echo "latest-version: ${{ steps.foo.outputs.latest-version }}"
+      - name: Show GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
