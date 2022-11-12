@@ -15,19 +15,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Show files after checkout
-        run: |
-          pwd
-          ls
-        shell: bash
       - name: Test action with default inputs
-        # https://github.blog/changelog/2022-01-25-github-actions-reusable-workflows-can-be-referenced-locally/
-        uses: ./action.yaml
+        uses: brainelectronics/changelog-based-release@feature/initial-implementation
         with:
           draft-release: true
       - name: Test action with custom inputs
         id: foo
-        uses: ./action.yaml
+        uses: brainelectronics/changelog-based-release@feature/initial-implementation
         with:
           github-token:  ${{ secrets.GITHUB_TOKEN }}
           changelog-path: 'changelog.md'
