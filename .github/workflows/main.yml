@@ -1,7 +1,7 @@
 # this file is *not* meant to cover or endorse the use of GitHub Actions, but rather to
 # help make automated releases for this project
 
-name: Test yourself
+name: Draft release
 
 on: [push]
 
@@ -9,9 +9,9 @@ permissions:
   contents: write
 
 jobs:
-  hello_world_job:
+  draft_release:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: Create draft release
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -21,18 +21,15 @@ jobs:
         # uses: brainelectronics/composite-action-test@${{ env.GITHUB_REF_NAME }}
         uses: brainelectronics/composite-action-test@feature/initial-implementation
         with:
-          draft-release: true
           github-token:  ${{ secrets.GITHUB_TOKEN }}
+          changelog-path: 'changelog.md'
           tag-name-prefix: 'v'
           tag-name-extension: '+${{ github.sha }}'
-          release-name-prefix: 'Test'
+          release-name-prefix: 'Test v'
           release-name-extension: '-rc${{ github.run_number }}.dev${{ github.event.number }}+${{ github.sha }}'
+          draft-release: true
+          prerelease: false
       - name: Report action output
         run: |
-          echo "installed-packages: ${{ steps.foo.outputs.installed-packages }}"
-          printf "latest-description: ${{ steps.foo.outputs.latest-description }}"
-          echo "latest-version: ${{ steps.foo.outputs.latest-version }}"
-      - name: Show GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+          printf "Latest changelog change description: ${{ steps.foo.outputs.latest-description }}"
+          echo "Latest changelog version: ${{ steps.foo.outputs.latest-version }}"
